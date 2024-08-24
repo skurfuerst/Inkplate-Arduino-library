@@ -61,28 +61,28 @@ class SysCall {
   /** Halt execution of this thread. */
   static void halt() {
     while (1) {
-      yield();
+      sysCallYield();
     }
   }
   /** Yield to other threads. */
-  static void yield();
+  static void sysCallYield();
 };
 
 #if defined(ESP8266)
-inline void SysCall::yield() {
+inline void SysCall::sysCallYield() {
   // Avoid ESP8266 bug
   delay(0);
 }
 #elif defined(ARDUINO)
-inline void SysCall::yield() {
+inline void SysCall::sysCallYield() {
   // Use the external Arduino yield() function.
   ::yield();
 }
 #elif defined(PLATFORM_ID)  // Only defined if a Particle device
-inline void SysCall::yield() {
+inline void SysCall::sysCallYield() {
   Particle.process();
 }
 #else  // ESP8266
-inline void SysCall::yield() {}
+inline void SysCall::sysCallYield() {}
 #endif  // ESP8266
 #endif  // SysCall_h
